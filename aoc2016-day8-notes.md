@@ -46,7 +46,7 @@ Rotating a row involves shifting it all right, and if pixels fall off the end th
 ![Image of rotating a row](https://github.com/stuartstein777/solution-notes/blob/main/fig3.png)
 
 
-But when you see the new row positions with the numbers above them its obvious we don't need to do any rotations at all.
+But when you see the new row positions with the numbers above them its obvious I don't need to do any rotations at all.
 Given a row of 8 pixels, a rotation of 5 is just splitting the row into the last 5 and the first 3 and swapping them.
 To handle cases where the rotation value is larger than the width of the row you can just mod it by the row width.
 
@@ -74,34 +74,37 @@ Implementation:
 (defn rotate-row [row-no places screen]
   (rotate places row-no screen))
 ```
+
 ![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig4.png)
 
 
 ## Rotating a column!
 
-This should be the tricky part! However, there is a trick we can do that makes this easy.
-Rotating a column is the same as rotating a row, as long as we rotate the entire screen 90 degrees first, making the columns into rows and rows into columns. Then we can rotate a row (using the existing rotate-row function) and finally rotate the whole screen back again.
+This should be the tricky part! However, there is a trick that makes this easy.
+Rotating a column is the same as rotating a row, as long as I rotate the entire screen 90 degrees first, making the columns into rows and rows into columns. Then I can rotate a row (using the existing rotate-row function) and finally rotate the whole screen back again.
 
-Internally I represent the screen as a vector of vectors. So a 3 x3 screen would a vector containg 3 vectors.
+Internally I represent the screen as a vector of vectors. So a 3x3 screen would be a vector containg 3 vectors.
 The first vector is a row 0, second vector is row 1 etc.
 
+![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig5.png)
+
+### (apply map vector screen)
 
 
+To understand how `(apply map vector screen)` can rotate it, lets take a function foo that takes 3 circles and returns those circles stacked:
 
-Clojure has a map function which takes a function f and  n sequences and calls f with items from the n sequences in order returning the results in a collection.
-
-For example if we had a function foo that takes 3 circles and returns them stacked:
-
+![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig6.png)
 
 
-Then we could map that function over 3 collections of circles:
+Then map that function over 3 collections of circles:
 
-
+![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig7.png)
 
 
 You can see foo gets the first item from the first sequence, the first item from the second sequence, the first item from the third sequence. Then gets the second item from the first sequence, the second item from the second sequence and so on.
 
-So to rotate our entire screen all we have to do is map the clojure function for creating vectors over the screen, and we will turns rows into columns and columns into rows. The rotate column function basically writes itself:
+The apply is needed because the vectors that make up the screen are within an outer vector.
+
 
 ```clojure
 (defn rotate-col [col-no places screen]
@@ -111,22 +114,9 @@ So to rotate our entire screen all we have to do is map the clojure function for
 ```
 
 
-##Parsing the puzzle input
+## Parsing the puzzle input
 
-Now we just need to parse the puzzle input and for each line call either rect, rotate-row or rotate-col. There's another cool trick here though. The parsing function can return one of the three instruction functions partially applied.
-
-If you didn't notice, all the functions take the screen they transform as their last argument. The parsing puzzle input function will create a function with its arguments baked in, except for the screen, we will call that when we reduce this list of functions into a final value.
-
-So say we had a function f that took 3 integers as its arguments and returned an integer. Maybe it just adds them all up!
-
-
-f :: int -> int -> int -> int
-f :: x y z -> x + y + z
-
-If we partially apply x and y, then we get back a function g that takes one integer
-g :: int -> int
-g :: z -> x + y + z (x and y are baked into g)
-
+```clojure
 (defn parse-line [line]
   (cond 
         ;; handle rect axb instructions
@@ -143,4 +133,5 @@ g :: z -> x + y + z (x and y are baked into g)
         (str/starts-with? line "rotate row")
         (let [[x y] (rest (re-matches #"rotate row y=(\d+) by (\d+)" line))]
           (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))))
+```
 
