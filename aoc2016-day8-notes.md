@@ -12,6 +12,8 @@ rotate column x=0 by 1
 
 rect axb turns on the pixels in the rectangle axb in the top left hand corner. e.g.
 
+![Image of Rect](https://github.com/stuartstein777/solution-notes/edit/main//fig1.png)
+
 Since it's purely just turning them on (as opposed to toggling), this is quite simple. I can create a function that takes a single row and a width w and turns on the first w pixels in that row.
 
 I just need to repeat the turned on indicator w times then concat the rest of the row:
