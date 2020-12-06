@@ -10,20 +10,24 @@ rotate row y=0 by 3
 rotate column x=0 by 1
 ```
 
+## rect
+
 rect axb turns on the pixels in the rectangle axb in the top left hand corner. e.g.
 
-![Image of Rect](https://github.com/stuartstein777/solution-notes/edit/main//fig1.png)
+![Image of Rect](https://github.com/stuartstein777/solution-notes/blob/main/fig1.png)
 
-Since it's purely just turning them on (as opposed to toggling), this is quite simple. I can create a function that takes a single row and a width w and turns on the first w pixels in that row.
+Since it's purely just turning them on (as opposed to toggling), this is quite simple. I can create a function that takes a single row `row` and a width `w` and turns on the first `w` pixels in that row.
 
-I just need to repeat the turned on indicator w times then concat the rest of the row:
+I just need to repeat the turned on indicator `w` times then concat the rest of the row:
 
+![Image of repeating and concating](https://github.com/stuartstein777/solution-notes/blob/main/fig2.png)
 
 
 ```clojure
 (defn turn-on-w-pixels [w row]
   (concat (repeat w \o) (drop w row)))
 ```
+
 Then its just take h rows from the screen and map this function over them, then concat the rest of the screen back onto these new rows. This gives the new screen after the rect call.
 
 ```clojure
@@ -33,23 +37,29 @@ Then its just take h rows from the screen and map this function over them, then
         (concat o (drop h screen))))
 ```
 
-Rotating a row
+## Rotating a row
 
 rotating rows is more interesting.
 
 Rotating a row involves shifting it all right, and if pixels fall off the end they rejoin at the start:
 
+![Image of rotating a row](https://github.com/stuartstein777/solution-notes/blob/main/fig3.png)
 
 
+But when you see the new row positions with the numbers above them its obvious we don't need to do any rotations at all.
+Given a row of 8 pixels, a rotation of 5 is just splitting the row into the last 5 and the first 3 and swapping them.
+To handle cases where the rotation value is larger than the width of the row you can just mod it by the row width.
 
-But when you see the new row positions with the numbers above them its obvious we don't need to do any rotations at all. A rotation of 5 is just splitting the row into the last 5 and the first 3 and swapping them. To handle cases where the rotation value is larger than the width of the row you can just mod it by the row width.
+Therefore rotating a single row is:
 
-Therefore rotating a single row is just taking all the rows before the row to be rotated. Call this rows_before.
-Take the row to be rotated.
-Rotate that row. Call this rotated_row.
-Take all the rows after the row to be rotated. Call this rows_after.
-Concatenate rows_before, rotated_row and rows_after to reconstruct the screen:
+1) Take all the rows before the row to be rotated. Call these `rows_before`.
+2) Take the row to be rotated.
+3) Rotate that row. Call this `rotated_row`.
+4) Take all the rows after the row to be rotated. Call these `rows_after`.
+5) Concatenate `rows_before`, `rotated_row` and `rows_after` to reconstruct the screen.
 
+Implementation:
+```clojure
 (defn rotate [places row-no screen]
   (let [before (take row-no screen)
         to-rotate (nth screen row-no)
@@ -58,14 +68,14 @@ Concatenate rows_before, rotated_row and rows_after to reconstruct the screen:
                         (take num-rows-before to-rotate))
         after (drop (inc row-no) screen)]
     (concat before [rotated] after)))
+```
 
-
-
-
+```clojure
 (defn rotate-row [row-no places screen]
   (rotate places row-no screen))
+```
 
-Rotating a column!
+##Rotating a column!
 
 This should be the tricky part! However, there is a trick we can do that makes this easy.
 Rotating a column is the same as rotating a row, as long as we rotate the entire screen 90 degrees first, making the columns into rows and rows into columns. Then we can rotate a row (using the existing rotate-row function) and finally rotate the whole screen back again.
