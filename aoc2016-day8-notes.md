@@ -10,6 +10,29 @@ rotate row y=0 by 3
 rotate column x=0 by 1
 ```
 
+## example inputs
+
+```
+rect 1x1
+rotate row y=0 by 3
+rect 2x1
+rotate row y=0 by 7
+rect 6x1
+rotate row y=0 by 3
+rect 2x1
+rotate row y=0 by 2
+rect 1x2
+rotate row y=1 by 10
+rotate row y=0 by 3
+rotate column x=0 by 1
+rect 2x1
+rotate column x=20 by 1
+rotate column x=15 by 1
+rotate column x=5 by 1
+```
+
+I need to process all the lines in the puzzle input and produce a final image representing the screen so I can read the screen.
+
 ## rect
 
 rect axb turns on the pixels in the rectangle axb in the top left hand corner. e.g.
