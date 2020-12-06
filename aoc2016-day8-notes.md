@@ -74,6 +74,8 @@ Implementation:
 (defn rotate-row [row-no places screen]
   (rotate places row-no screen))
 ```
+![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig4.png)
+
 
 ## Rotating a column!
 
