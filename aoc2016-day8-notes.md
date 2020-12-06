@@ -31,7 +31,7 @@ rotate column x=15 by 1
 rotate column x=5 by 1
 ```
 
-I need to process all the lines in the puzzle input and produce a final image representing the screen so I can read the screen.
+I need to process all the lines in the puzzle input and produce a final image representing the screen so I can read the message.
 
 ## rect
 
