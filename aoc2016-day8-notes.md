@@ -186,3 +186,60 @@ This function returns a partially applied transformation function for each line 
 Produces in the REPL:
 
 ![Final solution in REPL](https://github.com/stuartstein777/solution-notes/blob/main/fig8.png)
+
+
+## Full solution
+
+```clojure
+(def screen-width 50)
+(def screen-height 6)
+
+(defn turn-on-w-pixels [w row]
+  (concat (repeat w \o) (drop w row)))
+
+(defn rect [w h screen]
+  (as-> (take h screen) o
+        (map (partial turn-on-w-pixels w) o)
+        (concat o (drop h screen))))
+
+(defn rotate [places row-no screen]
+  (let [before (take row-no screen)
+        to-rotate (nth screen row-no)
+        num-rows-before (- (count to-rotate) places)
+        rotated (concat (drop num-rows-before to-rotate)
+                        (take num-rows-before to-rotate))
+        after (drop (inc row-no) screen)]
+    (concat before [rotated] after)))
+    
+(defn rotate-row [row-no places screen]
+  (rotate places row-no screen))
+  
+(defn rotate-col [col-no places screen]
+  (let [screen (apply map vector screen)]
+    (->> (rotate places col-no screen)
+         (apply map vector))))
+         
+(defn start-screen [h w]
+  (repeat h (repeat w \x)))
+  
+
+  (cond (str/starts-with? line "rect")
+        (let [[x y] (rest (re-matches #"rect (\d+)x(\d+)" line))]
+          (partial rect (Integer/parseInt x) (Integer/parseInt y)))
+
+        (str/starts-with? line "rotate column")
+        (let [[x y] (rest (re-matches #"rotate column x=(\d+) by (\d+)" line))]
+          (partial rotate-col (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))
+
+        (str/starts-with? line "rotate row")
+        (let [[x y] (rest (re-matches #"rotate row y=(\d+) by (\d+)" line))]
+          (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))))
+          
+(let [screen (start-screen screen-height screen-width)
+      inputs (->> (slurp "puzzle-inputs/2016/day8")
+                  (str/split-lines)
+                  (map parse-line))]
+  (->> (reduce (fn [acc i] (i acc)) screen inputs)
+       (map (partial apply str))
+       (map (fn [s] (str/replace (str/replace s "o" "▓") "x" " ")))))
+```
