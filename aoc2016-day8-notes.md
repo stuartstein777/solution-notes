@@ -1,6 +1,6 @@
 ### aoc 2016 day 8
 
-The puzzle is, given a screen of 50 x 6 pixels and a set of instructions for modifying what pixels are on / off, what message is displayed after all instructions are processe in order.
+The puzzle is, given a screen of 50 x 6 pixels and a set of instructions for modifying what pixels are on / off, what message is displayed after all instructions are processed in order.
 
 There are 3 types of instruction:
 
