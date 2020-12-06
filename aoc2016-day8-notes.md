@@ -166,7 +166,7 @@ The apply is needed because the vectors that make up the screen are within an ou
           (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))))
 ```
 
-This function returns a partially applied transformation function for each line in the puzzle input. These functions can then be input to a `reduce` call.
+This function returns a partially applied transformation function for each line in the puzzle input. These functions can then be input to a `reduce` call. Each function only requires the state of the screen as its non-applied parameter.
 
 ## Putting it all together
 
