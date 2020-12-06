@@ -1,6 +1,6 @@
 ### aoc 2016 day 8
 
-The puzzle is, given a screen of 50 x 6 pixels and a set of instructions what is the message on the final screen display.
+The puzzle is, given a screen of 50 x 6 pixels and a set of instructions for modifying what pixels are on / off, what message is displayed after all instructions are processe in order.
 
 There are 3 types of instruction:
 
@@ -101,14 +101,15 @@ You can see foo gets the first item from the first sequence, the first item from
 
 So to rotate our entire screen all we have to do is map the clojure function for creating vectors over the screen, and we will turns rows into columns and columns into rows. The rotate column function basically writes itself:
 
+```clojure
 (defn rotate-col [col-no places screen]
   (let [screen (apply map vector screen)]
     (->> (rotate places col-no screen)
          (apply map vector))))
+```
 
 
-
-Parsing the puzzle input
+##Parsing the puzzle input
 
 Now we just need to parse the puzzle input and for each line call either rect, rotate-row or rotate-col. There's another cool trick here though. The parsing function can return one of the three instruction functions partially applied.
 
