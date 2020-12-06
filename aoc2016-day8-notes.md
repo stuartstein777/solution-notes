@@ -1,0 +1,131 @@
+### aoc 2016 day 8
+
+The puzzle is, given a screen of 50 x 6 pixels and a set of instructions what is the message on the final screen display.
+
+There are 3 types of instruction:
+
+```
+rect 4x2
+rotate row y=0 by 3
+rotate column x=0 by 1
+```
+
+rect axb turns on the pixels in the rectangle axb in the top left hand corner. e.g.
+
+Since it's purely just turning them on (as opposed to toggling), this is quite simple. I can create a function that takes a single row and a width w and turns on the first w pixels in that row.
+
+I just need to repeat the turned on indicator w times then concat the rest of the row:
+
+
+
+```clojure
+(defn turn-on-w-pixels [w row]
+  (concat (repeat w \o) (drop w row)))
+```
+Then its just take h rows from the screen and map this function over them, then concat the rest of the screen back onto these new rows. This gives the new screen after the rect call.
+
+```clojure
+(defn rect [w h screen]
+  (as-> (take h screen) o
+        (map (partial turn-on-w-pixels w) o)
+        (concat o (drop h screen))))
+```
+
+Rotating a row
+
+rotating rows is more interesting.
+
+Rotating a row involves shifting it all right, and if pixels fall off the end they rejoin at the start:
+
+
+
+
+But when you see the new row positions with the numbers above them its obvious we don't need to do any rotations at all. A rotation of 5 is just splitting the row into the last 5 and the first 3 and swapping them. To handle cases where the rotation value is larger than the width of the row you can just mod it by the row width.
+
+Therefore rotating a single row is just taking all the rows before the row to be rotated. Call this rows_before.
+Take the row to be rotated.
+Rotate that row. Call this rotated_row.
+Take all the rows after the row to be rotated. Call this rows_after.
+Concatenate rows_before, rotated_row and rows_after to reconstruct the screen:
+
+(defn rotate [places row-no screen]
+  (let [before (take row-no screen)
+        to-rotate (nth screen row-no)
+        num-rows-before (- (count to-rotate) places)
+        rotated (concat (drop num-rows-before to-rotate)
+                        (take num-rows-before to-rotate))
+        after (drop (inc row-no) screen)]
+    (concat before [rotated] after)))
+
+
+
+
+(defn rotate-row [row-no places screen]
+  (rotate places row-no screen))
+
+Rotating a column!
+
+This should be the tricky part! However, there is a trick we can do that makes this easy.
+Rotating a column is the same as rotating a row, as long as we rotate the entire screen 90 degrees first, making the columns into rows and rows into columns. Then we can rotate a row (using the existing rotate-row function) and finally rotate the whole screen back again.
+
+Internally I represent the screen as a vector of vectors. So a 3 x3 screen would a vector containg 3 vectors.
+The first vector is a row 0, second vector is row 1 etc.
+
+
+
+
+Clojure has a map function which takes a function f and  n sequences and calls f with items from the n sequences in order returning the results in a collection.
+
+For example if we had a function foo that takes 3 circles and returns them stacked:
+
+
+
+Then we could map that function over 3 collections of circles:
+
+
+
+
+You can see foo gets the first item from the first sequence, the first item from the second sequence, the first item from the third sequence. Then gets the second item from the first sequence, the second item from the second sequence and so on.
+
+So to rotate our entire screen all we have to do is map the clojure function for creating vectors over the screen, and we will turns rows into columns and columns into rows. The rotate column function basically writes itself:
+
+(defn rotate-col [col-no places screen]
+  (let [screen (apply map vector screen)]
+    (->> (rotate places col-no screen)
+         (apply map vector))))
+
+
+
+Parsing the puzzle input
+
+Now we just need to parse the puzzle input and for each line call either rect, rotate-row or rotate-col. There's another cool trick here though. The parsing function can return one of the three instruction functions partially applied.
+
+If you didn't notice, all the functions take the screen they transform as their last argument. The parsing puzzle input function will create a function with its arguments baked in, except for the screen, we will call that when we reduce this list of functions into a final value.
+
+So say we had a function f that took 3 integers as its arguments and returned an integer. Maybe it just adds them all up!
+
+
+f :: int -> int -> int -> int
+f :: x y z -> x + y + z
+
+If we partially apply x and y, then we get back a function g that takes one integer
+g :: int -> int
+g :: z -> x + y + z (x and y are baked into g)
+
+(defn parse-line [line]
+  (cond 
+        ;; handle rect axb instructions
+        (str/starts-with? line "rect")
+        (let [[x y] (rest (re-matches #"rect (\d+)x(\d+)" line))]
+          (partial rect (Integer/parseInt x) (Integer/parseInt y)))
+
+        ;; handle rotate column instructions
+        (str/starts-with? line "rotate column")
+        (let [[x y] (rest (re-matches #"rotate column x=(\d+) by (\d+)" line))]
+          (partial rotate-col (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))
+
+        ;; handle rotate row instructions
+        (str/starts-with? line "rotate row")
+        (let [[x y] (rest (re-matches #"rotate row y=(\d+) by (\d+)" line))]
+          (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))))
+
