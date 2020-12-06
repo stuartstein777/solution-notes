@@ -86,7 +86,7 @@ Rotating a column is the same as rotating a row, as long as I rotate the entire 
 Internally I represent the screen as a vector of vectors. So a 3x3 screen would be a vector containg 3 vectors.
 The first vector is a row 0, second vector is row 1 etc.
 
-![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig5.png)
+![Image of screen representation](https://github.com/stuartstein777/solution-notes/blob/main/fig5.png)
 
 ### (apply map vector screen)
 
@@ -108,7 +108,7 @@ If we pass multiple vectors to map:
 
 Or visually:
 
-![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig7.png)
+![visualizing apply map vector](https://github.com/stuartstein777/solution-notes/blob/main/fig7.png)
 
 
 The apply is needed because the vectors that make up the screen are within an outer vector.
@@ -162,4 +162,4 @@ This function returns a partially applied transformation function for each line 
 
 Produces in the REPL:
 
-![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig8.png)
+![Final solution in REPL](https://github.com/stuartstein777/solution-notes/blob/main/fig8.png)
