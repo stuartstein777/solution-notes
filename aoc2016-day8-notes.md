@@ -143,3 +143,23 @@ The apply is needed because the vectors that make up the screen are within an ou
           (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))))
 ```
 
+This function returns a partially applied transformation function for each line in the puzzle input. These functions can then be input to a `reduce` call.
+
+## Putting it all together
+
+```clojure
+(defn start-screen [h w]
+  (repeat h (repeat w \x)))
+  
+(let [screen (start-screen screen-height screen-width)
+      inputs (->> (slurp "puzzle-inputs/2016/day8")
+                  (str/split-lines)
+                  (map parse-line))]
+  (->> (reduce (fn [acc i] (i acc)) screen inputs)
+       (map (partial apply str))
+       (map (fn [s] (str/replace (str/replace s "o" "▓") "x" " ")))))
+```
+
+Produces in the REPL:
+
+![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig8.png)
