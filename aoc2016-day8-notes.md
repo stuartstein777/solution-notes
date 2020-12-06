@@ -35,7 +35,7 @@ I need to process all the lines in the puzzle input and produce a final image re
 
 ## rect
 
-rect axb turns on the pixels in the rectangle axb in the top left hand corner. e.g.
+`rect a x b` turns on the pixels in the rectangle `a` wide and `b` high in the top left hand corner (0,0) e.g.
 
 ![Image of Rect](https://github.com/stuartstein777/solution-notes/blob/main/fig1.png)
 
