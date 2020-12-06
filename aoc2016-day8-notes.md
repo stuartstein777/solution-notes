@@ -91,17 +91,25 @@ The first vector is a row 0, second vector is row 1 etc.
 ### (apply map vector screen)
 
 
-To understand how `(apply map vector screen)` can rotate it, lets take a function foo that takes 3 circles and returns those circles stacked:
+To understand how `(apply map vector screen)` can rotate it, look at the `vector` function
 
-![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig6.png)
+```clojure
+(vector :a :b :c)
+;=> [:a :b :c]
 
+```
 
-Then map that function over 3 collections of circles:
+If we pass multiple vectors to map:
+
+```clojure
+(mapv vector [:a :b :c] [:d :e :f] [:g :h :o])
+=> [[:a :d :g] [:b :e :h] [:c :f :o]]
+```
+
+Or visually:
 
 ![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig7.png)
 
-
-You can see foo gets the first item from the first sequence, the first item from the second sequence, the first item from the third sequence. Then gets the second item from the first sequence, the second item from the second sequence and so on.
 
 The apply is needed because the vectors that make up the screen are within an outer vector.
 
