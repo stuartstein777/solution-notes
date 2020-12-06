@@ -61,12 +61,12 @@ Therefore rotating a single row is:
 Implementation:
 ```clojure
 (defn rotate [places row-no screen]
-  (let [before (take row-no screen)
-        to-rotate (nth screen row-no)
+  (let [before          (take row-no screen)
+        to-rotate       (nth screen row-no)
         num-rows-before (- (count to-rotate) places)
-        rotated (concat (drop num-rows-before to-rotate)
-                        (take num-rows-before to-rotate))
-        after (drop (inc row-no) screen)]
+        rotated         (concat (drop num-rows-before to-rotate)
+                                (take num-rows-before to-rotate))
+        after           (drop (inc row-no) screen)]
     (concat before [rotated] after)))
 ```
 
@@ -75,7 +75,7 @@ Implementation:
   (rotate places row-no screen))
 ```
 
-##Rotating a column!
+## Rotating a column!
 
 This should be the tricky part! However, there is a trick we can do that makes this easy.
 Rotating a column is the same as rotating a row, as long as we rotate the entire screen 90 degrees first, making the columns into rows and rows into columns. Then we can rotate a row (using the existing rotate-row function) and finally rotate the whole screen back again.
