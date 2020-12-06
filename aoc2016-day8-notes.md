@@ -138,10 +138,10 @@ The apply is needed because the vectors that make up the screen are within an ou
 
 
 ```clojure
-(defn rotate-col [col-no places screen]
-  (let [screen (apply map vector screen)]
-    (->> (rotate places col-no screen)
-         (apply map vector))))
+(defn rotate-col [col-no places screen]
+  (->> (apply map vector screen)
+       (rotate places col-no)
+       (apply map vector)))
 ```
 
 
@@ -215,9 +215,9 @@ Produces in the REPL:
   (rotate places row-no screen))
   
 (defn rotate-col [col-no places screen]
-  (let [screen (apply map vector screen)]
-    (->> (rotate places col-no screen)
-         (apply map vector))))
+  (->> (apply map vector screen)
+       (rotate places col-no)
+       (apply map vector)))
          
 (defn start-screen [h w]
   (repeat h (repeat w \x)))
