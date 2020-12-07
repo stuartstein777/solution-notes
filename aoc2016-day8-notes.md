@@ -194,6 +194,12 @@ Produces in the REPL:
 (def screen-width 50)
 (def screen-height 6)
 
+(defn start-screen [h w]
+  (repeat h (repeat w \x)))
+
+;; ====================================================================================
+;; transforming functions.
+
 (defn turn-on-w-pixels [w row]
   (concat (repeat w \o) (drop w row)))
 
@@ -219,22 +225,29 @@ Produces in the REPL:
        (rotate places col-no)
        (apply map vector)))
          
-(defn start-screen [h w]
-  (repeat h (repeat w \x)))
-  
+;; ======================================================================================
+;; parsing the input
+
+(defn parse-rect [line]
+  (let [[x y] (rest (re-matches #"rect (\d+)x(\d+)" line))]
+    (partial rect (Integer/parseInt x) (Integer/parseInt y))))
+
+(defn parse-rotate-col [line]
+  (let [[x y] (rest (re-matches #"rotate column x=(\d+) by (\d+)" line))]
+    (partial rotate-col (Integer/parseInt x) (mod (Integer/parseInt y) screen-width))))
+
+(defn parse-rotate-row [line]
+  (let [[x y] (rest (re-matches #"rotate row y=(\d+) by (\d+)" line))]
+    (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width))))
+    
 (defn parse-line [line]
-  (cond (str/starts-with? line "rect")
-        (let [[x y] (rest (re-matches #"rect (\d+)x(\d+)" line))]
-          (partial rect (Integer/parseInt x) (Integer/parseInt y)))
-
-        (str/starts-with? line "rotate column")
-        (let [[x y] (rest (re-matches #"rotate column x=(\d+) by (\d+)" line))]
-          (partial rotate-col (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))
-
-        (str/starts-with? line "rotate row")
-        (let [[x y] (rest (re-matches #"rotate row y=(\d+) by (\d+)" line))]
-          (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))))
+  (cond (str/starts-with? line "rect")          (parse-rect line)
+        (str/starts-with? line "rotate column") (parse-rotate-col line)
+        (str/starts-with? line "rotate row")    (parse-rotate-row line)))
           
+;; =======================================================================================
+;; get result
+
 (let [screen (start-screen screen-height screen-width)
       inputs (->> (slurp "puzzle-inputs/2016/day8")
                   (str/split-lines)
