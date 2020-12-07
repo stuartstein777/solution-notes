@@ -225,6 +225,7 @@ Produces in the REPL:
        (rotate places col-no)
        (apply map vector)))
          
+
 ;; ======================================================================================
 ;; parsing the input
 
@@ -232,18 +233,17 @@ Produces in the REPL:
   (let [[x y] (rest (re-matches #"rect (\d+)x(\d+)" line))]
     (partial rect (Integer/parseInt x) (Integer/parseInt y))))
 
-(defn parse-rotate-col [line]
-  (let [[x y] (rest (re-matches #"rotate column x=(\d+) by (\d+)" line))]
-    (partial rotate-col (Integer/parseInt x) (mod (Integer/parseInt y) screen-width))))
+(defn parse-rotate [line k]
+  (let [[x y] (rest (re-matches (re-pattern (str "rotate " k "=(\\d+) by (\\d+)")) line))]
+    (if (str/starts-with? k "row")
+      (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width))
+      (partial rotate-col (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))))
 
-(defn parse-rotate-row [line]
-  (let [[x y] (rest (re-matches #"rotate row y=(\d+) by (\d+)" line))]
-    (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width))))
-    
 (defn parse-line [line]
   (cond (str/starts-with? line "rect")          (parse-rect line)
-        (str/starts-with? line "rotate column") (parse-rotate-col line)
-        (str/starts-with? line "rotate row")    (parse-rotate-row line)))
+        (str/starts-with? line "rotate column") (parse-rotate line "column x")
+        (str/starts-with? line "rotate row")    (parse-rotate line "row y")))
+
           
 ;; =======================================================================================
 ;; get result
