@@ -203,12 +203,12 @@ Produces in the REPL:
         (concat o (drop h screen))))
 
 (defn rotate [places row-no screen]
-  (let [before (take row-no screen)
-        to-rotate (nth screen row-no)
+  (let [before          (take row-no screen)
+        to-rotate       (nth screen row-no)
         num-rows-before (- (count to-rotate) places)
         rotated (concat (drop num-rows-before to-rotate)
                         (take num-rows-before to-rotate))
-        after (drop (inc row-no) screen)]
+        after           (drop (inc row-no) screen)]
     (concat before [rotated] after)))
     
 (defn rotate-row [row-no places screen]
