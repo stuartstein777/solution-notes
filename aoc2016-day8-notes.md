@@ -148,22 +148,22 @@ The apply is needed because the vectors that make up the screen are within an ou
 ## Parsing the puzzle input
 
 ```clojure
-(defn parse-line [line]
-  (cond 
-        ;; handle rect axb instructions
-        (str/starts-with? line "rect")
-        (let [[x y] (rest (re-matches #"rect (\d+)x(\d+)" line))]
-          (partial rect (Integer/parseInt x) (Integer/parseInt y)))
+(defn parse-rect [line]
+  (let [[x y] (rest (re-matches #"rect (\d+)x(\d+)" line))]
+    (partial rect (Integer/parseInt x) (Integer/parseInt y))))
 
-        ;; handle rotate column instructions
-        (str/starts-with? line "rotate column")
-        (let [[x y] (rest (re-matches #"rotate column x=(\d+) by (\d+)" line))]
-          (partial rotate-col (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))
+(defn parse-rotate-col [line]
+  (let [[x y] (rest (re-matches #"rotate column x=(\d+) by (\d+)" line))]
+    (partial rotate-col (Integer/parseInt x) (mod (Integer/parseInt y) screen-width))))
 
-        ;; handle rotate row instructions
-        (str/starts-with? line "rotate row")
-        (let [[x y] (rest (re-matches #"rotate row y=(\d+) by (\d+)" line))]
-          (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width)))))
+(defn parse-rotate-row [line]
+  (let [[x y] (rest (re-matches #"rotate row y=(\d+) by (\d+)" line))]
+    (partial rotate-row (Integer/parseInt x) (mod (Integer/parseInt y) screen-width))))
+    
+(defn parse-line [line]
+  (cond (str/starts-with? line "rect")          (parse-rect line)
+        (str/starts-with? line "rotate column") (parse-rotate-col line)
+        (str/starts-with? line "rotate row")    (parse-rotate-row line)))
 ```
 
 This function returns a partially applied transformation function for each line in the puzzle input. These functions can then be input to a `reduce` call. Each function only requires the state of the screen as its non-applied parameter.
