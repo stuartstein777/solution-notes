@@ -222,7 +222,7 @@ Produces in the REPL:
 (defn start-screen [h w]
   (repeat h (repeat w \x)))
   
-
+(defn parse-line [line]
   (cond (str/starts-with? line "rect")
         (let [[x y] (rest (re-matches #"rect (\d+)x(\d+)" line))]
           (partial rect (Integer/parseInt x) (Integer/parseInt y)))
