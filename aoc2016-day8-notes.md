@@ -37,13 +37,13 @@ I need to process all the lines in the puzzle input and produce a final image re
 
 `rect a x b` turns on the pixels in the rectangle `a` wide and `b` high in the top left hand corner (0,0) e.g.
 
-![Image of Rect](https://github.com/stuartstein777/solution-notes/blob/main/fig1.png)
+![Image of Rect](aoc2016day8/fig1.png)
 
 Since it's purely just turning them on (as opposed to toggling), this is quite simple. I can create a function that takes a single row `row` and a width `w` and turns on the first `w` pixels in that row.
 
 I just need to repeat the turned on indicator `w` times then concat the rest of the row:
 
-![Image of repeating and concating](https://github.com/stuartstein777/solution-notes/blob/main/fig2.png)
+![Image of repeating and concating](aoc2016day8/fig2.png)
 
 
 ```clojure
@@ -66,7 +66,7 @@ rotating rows is more interesting.
 
 Rotating a row involves shifting it all right, and if pixels fall off the end they rejoin at the start:
 
-![Image of rotating a row](https://github.com/stuartstein777/solution-notes/blob/main/fig3.png)
+![Image of rotating a row](aoc2016day8/fig3.png)
 
 
 But when you see the new row positions with the numbers above them its obvious I don't need to do any rotations at all.
@@ -98,7 +98,7 @@ Implementation:
   (rotate places row-no screen))
 ```
 
-![Image of rotating a row 2](https://github.com/stuartstein777/solution-notes/blob/main/fig4.png)
+![Image of rotating a row 2](aoc2016day8/fig4.png)
 
 
 ## Rotating a column!
@@ -109,7 +109,7 @@ Rotating a column is the same as rotating a row, as long as I rotate the entire 
 Internally I represent the screen as a vector of vectors. So a 3x3 screen would be a vector containg 3 vectors.
 The first vector is a row 0, second vector is row 1 etc.
 
-![Image of screen representation](https://github.com/stuartstein777/solution-notes/blob/main/fig5.png)
+![Image of screen representation](aoc2016day8/fig5.png)
 
 ### (apply map vector screen)
 
@@ -131,7 +131,7 @@ If we pass multiple vectors to map:
 
 Or visually:
 
-![visualizing apply map vector](https://github.com/stuartstein777/solution-notes/blob/main/fig7.png)
+![visualizing apply map vector](aoc2016day8/fig7.png)
 
 
 The apply is needed because the vectors that make up the screen are within an outer vector.
@@ -185,7 +185,7 @@ This function returns a partially applied transformation function for each line 
 
 Produces in the REPL:
 
-![Final solution in REPL](https://github.com/stuartstein777/solution-notes/blob/main/fig8.png)
+![Final solution in REPL](aoc2016day8/fig8.png)
 
 
 ## Full solution
