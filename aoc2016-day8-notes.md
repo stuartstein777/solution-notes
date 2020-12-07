@@ -212,8 +212,8 @@ Produces in the REPL:
   (let [before          (take row-no screen)
         to-rotate       (nth screen row-no)
         num-rows-before (- (count to-rotate) places)
-        rotated (concat (drop num-rows-before to-rotate)
-                        (take num-rows-before to-rotate))
+        rotated         (concat (drop num-rows-before to-rotate)
+                                (take num-rows-before to-rotate))
         after           (drop (inc row-no) screen)]
     (concat before [rotated] after)))
     
