@@ -125,7 +125,7 @@ Loom is a Clojure library for building graphs. It makes this problem simple. I j
 3) Count the nodes reachable from "shiny gold"
 4) Needs a final dec as this includes the "shiny gold" node itself.
 
-```
+```clojure
 (defn reachable-from-shiny-gold []
   (-> (apply lg/weighted-digraph (parse-input))
       (lg/transpose)
