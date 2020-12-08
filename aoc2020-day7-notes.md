@@ -47,9 +47,11 @@ Now I can start from shiny gold and see how many unique nodes I can arrive at.
 
 In this case it's 4, as expected.
 
+```
 Shiny gold > Muted Yellow > dark orange
 Shiny gold > bright white > light red
 Shiny gold > bright white > dark orange
+```
 
 SO the unique nodes are:
 1) muted yellow
