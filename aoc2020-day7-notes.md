@@ -91,6 +91,31 @@ becomes
 {"dotted black" {}}
 ```
 
+The parsing code:
+
+```clojure
+(defn parse-bag [bag]
+  (when (not= bag "no other bags")
+    (let [reg (first (re-seq #"(\d+) (\w+ \w+) bag" bag))]
+      [(nth reg 2) (Integer/parseInt (nth reg 1))])))
+
+(defn parse-line [line]
+  (let [[parent & rest] (str/split line #"contain|,")
+       node (second (re-find #"(\w+ \w+) bags" (str/trim parent)))
+       contained-bags (if (= "no other bags." (str/trim (first rest)))
+                        {}
+                        (->> (map str/trim rest)
+                             (map parse-bag)
+                             (reduce conj {})))]
+      {node contained-bags}))
+
+(defn parse-input []
+  (->> (slurp "puzzle-inputs/2020/day7")
+       (str/split-lines)
+       (map parse-line)))
+```
+
+
 ## Loom
 
 Loom is a Clojure library for building graphs.
