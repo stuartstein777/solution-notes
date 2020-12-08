@@ -118,12 +118,14 @@ The parsing code:
 
 ## Loom
 
+https://github.com/aysylu/loom
+
 Loom is a Clojure library for building graphs. It makes this problem simple. I just have to:
 
 1) Build graph
 2) Transpose the graph
 3) Count the nodes reachable from "shiny gold"
-4) Needs a final dec as this includes the "shiny gold" node itself.
+4) Needs a final dec as the count includes the "shiny gold" node itself, which I don't want to include.
 
 ```clojure
 (defn reachable-from-shiny-gold []
