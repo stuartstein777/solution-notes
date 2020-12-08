@@ -4,7 +4,7 @@ The puzzle link:
 https://adventofcode.com/2020/day/7#part1
 
 ## Part 1
-This puzzle involves generating calculating the number of ways we can arrive at a shiny gold bag when other bags can contain shiny gold bags.
+This puzzle involves calculating the number of ways we can arrive at a shiny gold bag when other bags can contain shiny gold bags.
 
 Example test input:
 
