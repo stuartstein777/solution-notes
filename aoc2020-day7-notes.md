@@ -151,3 +151,7 @@ So, a single shiny gold bag must contain 1 dark olive bag (and the 7 bags within
 This is just asking to sum the weights leading out from shiny gold to the edges.
 
 ![transposed test graph](aoc2020day7/fig5.png)
+
+So what we can do here is the get successors and their weights to shiny gold.
+
+This would return `dark olive 1` and `vibrant plum 2`.
