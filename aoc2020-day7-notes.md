@@ -154,6 +154,6 @@ This is just asking to sum the weights leading out from shiny gold to the edges.
 
 ![transposed test graph](aoc2020day7/fig5.png)
 
-What I can do here is the get successors and their weights to shiny gold, then recursively get the weights to those nodes and so on.
+I think here I can get successors and their weights to shiny gold, then recursively get the weights to those nodes and so on. Summing all these weights up.
 
 
