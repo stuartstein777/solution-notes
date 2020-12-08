@@ -1,6 +1,8 @@
-### aoc 2016 day 8
+### aoc 2016 day 8 - Part 2
 
-The puzzle is, given a screen of 50 x 6 pixels and a set of instructions for modifying what pixels are on / off, what message is displayed after all instructions are processed in order.
+puzzle link: https://adventofcode.com/2016/day/8
+
+The puzzle: Given a screen of 50 x 6 pixels and a set of instructions for modifying what pixels are on / off, what message is displayed after all instructions are processed in order.
 
 There are 3 types of instruction:
 
@@ -41,7 +43,7 @@ I need to process all the lines in the puzzle input and produce a final image re
 
 Since it's purely just turning them on (as opposed to toggling), this is quite simple. I can create a function that takes a single row `row` and a width `w` and turns on the first `w` pixels in that row.
 
-I just need to repeat the turned on indicator `w` times then concat the rest of the row:
+I just need to repeat the turned on indicator `w` times then concat the remainder of the row:
 
 ![Image of repeating and concating](aoc2016day8/fig2.png)
 
@@ -51,7 +53,11 @@ I just need to repeat the turned on indicator `w` times then concat the rest of 
   (concat (repeat w \o) (drop w row)))
 ```
 
-Then its just take h rows from the screen and map this function over them, then concat the rest of the screen back onto these new rows. This gives the new screen after the rect call.
+Steps to turn on a rectangle of (w x h):
+
+1) Take h rows
+2) map the turn-on-w-pixels over these rows
+3) concat those rows with the rest of the rows from the original screen, which I can get from dropping h rows.
 
 ```clojure
 (defn rect [w h screen]
@@ -70,8 +76,9 @@ Rotating a row involves shifting it all right, and if pixels fall off the end th
 
 
 But when you see the new row positions with the numbers above them its obvious I don't need to do any rotations at all.
-Given a row of 8 pixels, a rotation of 5 is just splitting the row into the last 5 and the first 3 and swapping them.
-To handle cases where the rotation value is larger than the width of the row you can just mod it by the row width.
+Given a row of 8 pixels, a rotation of 5 is just splitting the row into the last 5 and the first 3 and swapping those sections.
+
+To handle cases where the rotation value is larger than the width of the row I can just mod it by the row width.
 
 Therefore rotating a single row is:
 
