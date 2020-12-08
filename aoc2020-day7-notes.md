@@ -33,7 +33,7 @@ Given the full puzzle input, how many bag colors can we choose to carry our shin
 
 This can solved using a directed weighted graph. The example test input as a directed weighted graph would look like:
 
-![Final solution in REPL](aoc2020day7/fig3.png)
+![Test graph](aoc2020day7/fig3.png)
 
 From the above you can see the muted yellow node connects to the shiny gold. As does the bright white node.
 
@@ -41,4 +41,9 @@ If I want to find how many ways I can arrive at shiny gold, from any node, I nee
 
 The transposed test graph:
 
+![transposed test graph](aoc2020day7/fig4.png)
+
+Now I can start from shiny gold and see how many unique nodes I can arrive at.
+
+In this case it's 4, as expected.
 
