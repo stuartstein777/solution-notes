@@ -118,5 +118,20 @@ The parsing code:
 
 ## Loom
 
-Loom is a Clojure library for building graphs.
+Loom is a Clojure library for building graphs. It makes this problem simple. I just have to:
+
+1) Build graph
+2) Transpose the graph
+3) Count the nodes reachable from "shiny gold"
+4) Needs a final dec as this includes the "shiny gold" node itself.
+
+```
+(defn reachable-from-shiny-gold []
+  (-> (apply lg/weighted-digraph (parse-input))
+      (lg/transpose)
+      (ld/subgraph-reachable-from "shiny gold")
+      (lg/nodes)
+      (count)
+      (dec)))
+```
 
