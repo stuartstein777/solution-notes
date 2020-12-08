@@ -47,3 +47,51 @@ Now I can start from shiny gold and see how many unique nodes I can arrive at.
 
 In this case it's 4, as expected.
 
+Shiny gold > Muted Yellow > dark orange
+Shiny gold > bright white > light red
+Shiny gold > bright white > dark orange
+
+SO the unique nodes are:
+1) muted yellow
+2) dark orange
+3) bright white
+4) light red.
+
+
+## Parsing the input
+
+I want to parse a line of the input into the form
+
+```clojure
+{"parent"
+  {"bag" weight "bag" weight}}
+```
+
+e.g.
+
+```
+light red bags contain 1 bright white bag, 2 muted yellow bags.
+
+```
+becomes
+
+```clojure
+{"light red" {"bright white" 1, "muted yellow" 2}}
+```
+
+and
+
+```
+dotted black bags contain no other bags.
+```
+
+becomes
+
+```clojure
+{"dotted black" {}}
+```
+
+## Loom
+
+Loom is a Clojure library for building graphs.
+
