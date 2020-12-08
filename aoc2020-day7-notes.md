@@ -33,4 +33,4 @@ Given the full puzzle input, how many bag colors can we choose to carry our shin
 
 This can solved using a directed weighted graph. The example test input as a directed weighted graph would look like:
 
-![Final solution in REPL](aoc2016day8/fig3.png)
+![Final solution in REPL](aoc2020day7/fig3.png)
