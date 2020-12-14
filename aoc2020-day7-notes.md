@@ -139,21 +139,3 @@ Loom is a Clojure library for building graphs. It makes this problem simple. I j
       (dec)))
 ```
 
-## Part 2
-
-Consider again your shiny gold bag and the rules from the above example:
-
-    faded blue bags contain 0 other bags.
-    dotted black bags contain 0 other bags.
-    vibrant plum bags contain 11 other bags: 5 faded blue bags and 6 dotted black bags.
-    dark olive bags contain 7 other bags: 3 faded blue bags and 4 dotted black bags.
-
-So, a single shiny gold bag must contain 1 dark olive bag (and the 7 bags within it) plus 2 vibrant plum bags (and the 11 bags within each of those): 1 + 1*7 + 2 + 2*11 = 32 bags! Be sure to count all of the bags, even if the nesting becomes topologically impractical!
-
-This is just asking to sum the weights leading out from shiny gold to the edges.
-
-![transposed test graph](aoc2020day7/fig5.png)
-
-I think here I can get successors and their weights to shiny gold, then recursively get the weights to those nodes and so on. Summing all these weights up.
-
-
